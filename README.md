@@ -153,9 +153,11 @@ Player JohnDoe swaps the tiles "EAZ" for three random tiles in the tile bag in g
 
 ## FAQ
 * ***How does Double/Triple Letter/Word score get calculated?***
+
   Double/Triple Letter score tiles are always calculated before Double/Triple word score tiles. 
 
-* ***If I play a word that intersects a tile that already had Double/Triple Letter/Word score, does it get counted again?**
+* ***If I play a word that intersects a tile that already had Double/Triple Letter/Word score, does it get counted again?***
+
   No. Score modifiers are only applied for new tiles. If a new tile is on a modifier, and creates  multiple words, the modifier will be applied to both words. 
   
 
