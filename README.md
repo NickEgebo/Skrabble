@@ -39,7 +39,7 @@ The repository contains the API definition for the Skrabble server, as well as c
   
 **URL**
 ```
-[GET] http://SkrabbleHost:8888/game/:gameId
+[GET] http://SkrabbleHost:8888/:gameId/game
 ```
 **Params**
 ```
@@ -48,7 +48,7 @@ gameId=[string]    // Game Name
 **Example**
 Requests the current state of TestGame
 ```url
-[GET] http://SkrabbleHost:8888/game/TestGame
+[GET] http://SkrabbleHost:8888/TestGame/game
 ```
 
 ----  
@@ -60,7 +60,7 @@ Requests the current state of TestGame
   
 **URL**
 ```url
-[GET] http://SkrabbleHost:8888/game/:gameId/join/:playerId
+[GET] http://SkrabbleHost:8888/:gameId/join/:playerId
 ```
 **Params**
 ```
@@ -70,7 +70,7 @@ playerId=[string]    // Player Name
 **Example**
 Player JohnDoe joins the game TestGame
 ```url
-[GET] http://SkrabbleHost:8888/game/TestGame/join/JohnDoe
+[GET] http://SkrabbleHost:8888/TestGame/join/JohnDoe
 ```  
 
 ----
@@ -79,7 +79,7 @@ Player JohnDoe joins the game TestGame
   
 **URL**
 ```
-[DELETE] http://SkrabbleHost:8888/:gameId
+[DELETE] http://SkrabbleHost:8888/:gameId/delete
 ```
 **Params**
 ```
@@ -88,7 +88,7 @@ gameId=[string]      // Game Name
 **Example**
 Deletes the game TestGame
 ```url
-[DELETE] http://SkrabbleHost:8888/TestGame
+[DELETE] http://SkrabbleHost:8888/TestGame/delete
 ```
 
 ----  
@@ -97,7 +97,7 @@ Deletes the game TestGame
   
 **URL**
 ```
-[GET] http://SkrabbleHost:8888/game/:gameId/:playerId/playword/:x/:y/:direction/:word
+[GET] http://SkrabbleHost:8888/:gameId/:playerId/playword/:x/:y/:direction/:word
 ```
 **Params**
 ```
@@ -111,7 +111,7 @@ word=[string]        // Word to play. Must include tiles already on board.
 **Example**
 Player JohnDoe plays the word QUAKER starting at tile (7,5) horizontally in TestGame.
 ```url
-[GET] http://SkrabbleHost:8888/game/TestGame/JohnDoe/playword/7/5/HORIZONTAL/QUAKER
+[GET] http://SkrabbleHost:8888/TestGame/JohnDoe/playword/7/5/HORIZONTAL/QUAKER
 ```
 
 ----  
@@ -120,7 +120,7 @@ Player JohnDoe plays the word QUAKER starting at tile (7,5) horizontally in Test
   
 **URL**
 ```
-[GET] http://SkrabbleHost:8888/game/:gameId/:playerId/skipturn
+[GET] http://SkrabbleHost:8888/:gameId/:playerId/skipturn
 ```
 **Params**
 ```
@@ -130,7 +130,7 @@ playerId=[string]    // Player Name who is skipping
 **Example**
 Player JohnDoe skips their turn in TestGame.
 ```url
-[GET] http://SkrabbleHost:8888/game/TestGame/JohnDoe/skipturn
+[GET] http://SkrabbleHost:8888/TestGame/JohnDoe/skipturn
 ```
 
 ----
@@ -139,7 +139,7 @@ Player JohnDoe skips their turn in TestGame.
   
 **URL**
 ```
-[GET] http://SkrabbleHost:8888/game/:gameId/:playerId/swaptiles/:tiles
+[GET] http://SkrabbleHost:8888/:gameId/:playerId/swaptiles/:tiles
 ```
 **Params**
 ```
@@ -150,7 +150,7 @@ tiles=[string]       // Tiles which the player wishes to swap
 **Example**
 Player JohnDoe swaps the tiles "EAZ" for three random tiles in the tile bag in game TestGame.
 ```url
-[GET] http://SkrabbleHost:8888/game/TestGame/JohnDoe/swaptiles/EAZ
+[GET] http://SkrabbleHost:8888/TestGame/JohnDoe/swaptiles/EAZ
 ```
 
 ## FAQ
