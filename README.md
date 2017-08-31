@@ -57,7 +57,7 @@ Requests the current state of TestGame
   - Tile Bag
   
 **URL**
-```
+```url
 [GET] http://SkrabbleHost:8888/game/:gameId/join/:playerId
 ```
 **Params**
