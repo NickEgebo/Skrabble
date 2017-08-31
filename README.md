@@ -1,6 +1,8 @@
 # Skrabble
 The repository contains the API definition for the Skrabble server, as well as client implementations in various languages.
 
+![Skrabble Sample](Skrabble.png)
+
 ## Table of content
 
 - [Rules](#rules)
