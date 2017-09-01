@@ -1,9 +1,9 @@
 # Skrabble
-The repository contains the API definition for the Skrabble server, as well as client implementations in various languages.
+This repository contains the API definition for the Skrabble server, as well as client implementations in various programming languages.
 
 ![Skrabble Sample](Skrabble.png)
 
-## Table of content
+## Table of contents
 
 - [Rules](#rules)
 - [API](#api)
@@ -14,38 +14,58 @@ The repository contains the API definition for the Skrabble server, as well as c
     - [Swap Tiles](#swap-tiles)
     - [Skip Turn](#skip-turn)
 - [FAQ](#faq)
-- [Example Board JSON](#example-board-json)
+- [Example Game Object JSON](#example-game-object-json)
 
 ## Rules
-- The first word played must cross the starting tile
-- All words other than the first must be adjacent to, or intersect, an existing tile
-- Players may perform on of the following actions on their turn:
-  - play a word, 
-  - skip their turn
-  - swap any number of tiles
-- The game ends when ????
 
+### Summary
+Skrabble is a two-player word game played on a 15x15 **Board**. The goal of the game is to accumulate more points than your opponent by placing tiles on the board that spell out valid words from the SkrabbleDict.txt file.
+
+### Game Start
+At the start of the game, players are assigned a **Shelf** of **Tiles** drawn from the games **Tile Bag**. The **Tile Bag** starts with a fixed distribution of tiles, which can be found in the TileDistribution.txt file. **Tiles** each contain a single letter and a point value (with the exception of the ' ' tile). 
+
+### Player Turns
+During a players turn, they can perform one of the following actions.
+- **Play** a word by placing tiles from their shelf onto the board
+- **Swap** any number of tiles from their shelf with the tile bag
+- **Skip** their turn
+
+### Playing Words
+When **Playing** a word, there are a few conditions that must be met.
+- The first word played in a game must cross the **Start** tile
+- All words other than the first must be either **Adjacent** to or intersect *at least* one existing tile on the board
+
+### Scoring
+After a word is played, its **Score** is determined by a number of factors.
+- The point value word itself
+- The point values of any new, **Adjacent** words created by placing tiles
+- Any **Multipliers** that new tiles were placed on top of
+- Executing a **Bingo** by playing all 7 tiles from the players tile shelf (+50 points)
+    
+### Win Condition
+The game ends when both players each **Skip** or **Swap** two turns consecutively (four total). The **Final Score** is calculated as the sum of each players word scores, minus the point value of any tiles remaining on their tile shelf.
 
 ## API
 
 ### Get Game State 
-
-  Returns a JSON object that represent the current state of the supplied game, including:
-  - Game Status
-  - Board State
-  - Player Status
-  - Tile Bag
-  - Starting Tile Distribution
+Create a new game, or retrieve the state of an existing game.
   
 **URL**
 ```
 [GET] http://SkrabbleHost:8888/:gameId/game
 ```
 **Params**
-```
-gameId=[string]    // Game Name
-```
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game|
+
+**Returns**
+
+A Game object that represent the current state of the game, which includes Game Status, Turn State, Board State, Player Status, and Tile Bag.
+
 **Example**
+
 Requests the current state of TestGame
 ```url
 [GET] http://SkrabbleHost:8888/TestGame/game
@@ -53,21 +73,25 @@ Requests the current state of TestGame
 
 ----  
 ### Join Game
-  Returns a Board JSON object that represent the current state of the game AFTER joining. Updated fields may include:
-  - Game Status
-  - Player Status
-  - Tile Bag
+Join a game awaiting players.
   
 **URL**
 ```url
 [GET] http://SkrabbleHost:8888/:gameId/join/:playerId
 ```
 **Params**
-```
-gameId=[string]      // Game Name
-playerId=[string]    // Player Name
-```
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game|
+|playerId|string|Name of a the player joining|
+
+**Returns**
+
+A Game object that represents the current state of the game *after* joining. 
+
 **Example**
+
 Player JohnDoe joins the game TestGame
 ```url
 [GET] http://SkrabbleHost:8888/TestGame/join/JohnDoe
@@ -75,17 +99,24 @@ Player JohnDoe joins the game TestGame
 
 ----
 ### Delete Game
-  Deletes an existing Skrabble game
+Delete an existing Skrabble game.
   
 **URL**
 ```
 [DELETE] http://SkrabbleHost:8888/:gameId/delete
 ```
 **Params**
-```
-gameId=[string]      // Game Name
-```
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game being deleted|
+
+**Returns**
+
+Nothing.
+
 **Example**
+
 Deletes the game TestGame
 ```url
 [DELETE] http://SkrabbleHost:8888/TestGame/delete
@@ -93,22 +124,29 @@ Deletes the game TestGame
 
 ----  
 ### Play Word
-  Play a word onto the board with a set of parameters. Requires the full word, including tiles already present on the board.
+Play a word onto the board with a set of parameters. Requires the full word, including tiles already present on the board.
   
 **URL**
 ```
 [GET] http://SkrabbleHost:8888/:gameId/:playerId/playword/:x/:y/:direction/:word
 ```
 **Params**
-```
-gameId=[string]      // Game Name
-playerId=[string]    // Player Name playing the word
-x=[integer]          // X position of the start of the word
-y=[integer]          // Y position of the start of the word
-direction=[string]   // Direction the word will be played. Valid values are "HORIZONTAL" or "VERTICAL"
-word=[string]        // Word to play. Must include tiles already on board.
-```
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game|
+|playerId|string|Name of the player playing a word|
+|x|integer *i* where 0<=*i*<15|X position of the start of the word|
+|y|integer *j* where 0<=*j*<15|Y position of the start of the word|
+|direction|HORIZONTAL or VERTICAL|Direction the word will be played on the board|
+|word|string|Word being played, including tiles already on the board|
+
+**Returns**
+
+A Game object that represents the current state of the game *after* the word is played. 
+
 **Example**
+
 Player JohnDoe plays the word QUAKER starting at tile (7,5) horizontally in TestGame.
 ```url
 [GET] http://SkrabbleHost:8888/TestGame/JohnDoe/playword/7/5/HORIZONTAL/QUAKER
@@ -116,18 +154,25 @@ Player JohnDoe plays the word QUAKER starting at tile (7,5) horizontally in Test
 
 ----  
 ### Skip Turn
-  Skip a turn.
+Skip a turn.
   
 **URL**
 ```
 [GET] http://SkrabbleHost:8888/:gameId/:playerId/skipturn
 ```
 **Params**
-```
-gameId=[string]      // Game Name
-playerId=[string]    // Player Name who is skipping
-```
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game|
+|playerId|string|Name of a the player skipping|
+
+**Returns**
+
+A Game object that represents the current state of the game *after* the turn is skipped. 
+
 **Example**
+
 Player JohnDoe skips their turn in TestGame.
 ```url
 [GET] http://SkrabbleHost:8888/TestGame/JohnDoe/skipturn
@@ -135,20 +180,27 @@ Player JohnDoe skips their turn in TestGame.
 
 ----
 ### Swap Tiles
-  Swap tiles from your shelf with tiles in the tile bag. Tiles are drawn before the tiles to be swapped are added back to the bag.
+Swap tiles from your shelf with tiles in the tile bag. Tiles are drawn before the tiles to be swapped are added back to the bag.
   
 **URL**
 ```
 [GET] http://SkrabbleHost:8888/:gameId/:playerId/swaptiles/:tiles
 ```
 **Params**
-```
-gameId=[string]      // Game Name
-playerId=[string]    // Player Name who is skipping
-tiles=[string]       // Tiles which the player wishes to swap
-```
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game|
+|playerId|string|Name of a the player swapping tiles|
+|tiles|string, length<=7|Tiles the player whiches to swap with the tile bag|
+
+**Returns**
+ 
+ A Game object that represents the current state of the game *after* the tiles are swapped. 
+
 **Example**
-Player JohnDoe swaps the tiles "EAZ" for three random tiles in the tile bag in game TestGame.
+ 
+ Player JohnDoe swaps the tiles "EAZ" for three random tiles in the tile bag in game TestGame.
 ```url
 [GET] http://SkrabbleHost:8888/TestGame/JohnDoe/swaptiles/EAZ
 ```
@@ -163,7 +215,7 @@ Player JohnDoe swaps the tiles "EAZ" for three random tiles in the tile bag in g
   No. Score modifiers are only applied for new tiles. If a new tile is on a modifier, and creates  multiple words, the modifier will be applied to both words. 
   
 
-## Example Board JSON
+## Example Game Object JSON
   ```
   {
   "_id":"test200",
