@@ -8,6 +8,7 @@ This repository contains the API definition for the Skrabble server, as well as 
 - [Rules](#rules)
 - [API](#api)
     - [Get Game State](#get-game-state)
+    - [Get Player Game State](#get-player-game-state)
     - [Join Game](#join-game)
     - [Delete Game](#delete-game)
     - [Play Word](#play-word)
@@ -69,6 +70,33 @@ A Game object that represent the current state of the game, which includes Game 
 Requests the current state of TestGame
 ```url
 [GET] http://SkrabbleHost:8888/TestGame/game
+```
+
+----  
+
+### Get Player Game State 
+Retrieve the state of an existing game filtered to only the information that would be available to an individual player, such as their own tiles.
+  
+**URL**
+```
+[GET] http://SkrabbleHost:8888/:gameId/game/:playerId
+```
+**Params**
+
+|Param|Valid Values|Description|
+|-----|------------|-----------|
+|gameId|string|Name of the game|
+|playerId|string|Name of a the player requesting game state|
+
+**Returns**
+
+A Game object that represent the current state of the game filtered for a specific player.
+
+**Example**
+
+Requests the current state of TestGame
+```url
+[GET] http://SkrabbleHost:8888/TestGame/game/JohnDoe
 ```
 
 ----  
